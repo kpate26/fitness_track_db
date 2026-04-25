@@ -7,7 +7,9 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "predev": "prisma generate",
     "dev": "node --env-file=.env --watch src/server.js",
+    "prestart": "prisma generate",
     "start": "node --env-file=.env src/server.js",
     "lint": "eslint .",
     "prisma:generate": "prisma generate",
