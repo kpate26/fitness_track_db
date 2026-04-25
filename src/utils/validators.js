@@ -1,5 +1,7 @@
-import { Difficulty, MuscleGroup, Role } from '@prisma/client';
+import prismaClientPkg from '@prisma/client';
 import { createHttpError } from './httpError.js';
+
+const { Difficulty, MuscleGroup, Role } = prismaClientPkg;
 
 export const ALLOWED_EXERCISE_MUSCLE_GROUPS = new Set(Object.values(MuscleGroup));
 export const ALLOWED_EXERCISE_DIFFICULTIES = new Set(Object.values(Difficulty));

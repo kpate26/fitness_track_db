@@ -1,10 +1,12 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { Prisma } from '@prisma/client';
+import prismaPackage from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
 import { JWT_EXPIRES_IN, JWT_SECRET } from '../config/constants.js';
 import { validateLoginBody, validateSignupBody } from '../utils/validators.js';
 import { createHttpError } from '../utils/httpError.js';
+
+const { Prisma } = prismaPackage;
 
 function serializeUser(user) {
   return {

@@ -1,6 +1,8 @@
 import bcrypt from 'bcryptjs';
-import { Difficulty, MuscleGroup, PrismaClient, Role } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
+import prismaClientPkg from '@prisma/client';
+
+const { Difficulty, MuscleGroup, PrismaClient, Role } = prismaClientPkg;
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is required for seeding');
