@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  TRAINER
+  USER
+}
+
+enum MuscleGroup {
+  CHEST
+  BACK
+  LEGS
+  SHOULDERS
+  ARMS
+  CORE
+  CARDIO
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+model User {
+  id           Int        @id @default(autoincrement())
+  name         String
+  email        String     @unique
+  passwordHash String
+  role         Role       @default(USER)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  exercises    Exercise[]
+  workouts     Workout[]
+  logs         Log[]
+}
+
+model Exercise {
+  id               Int               @id @default(autoincrement())
+  name             String
+  description      String
+  muscleGroup      MuscleGroup
+  difficulty       Difficulty
+  createdBy        Int
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  creator          User              @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  workoutExercises WorkoutExercise[]
+}
+
+model Workout {
+  id               Int               @id @default(autoincrement())
+  name             String
+  description      String
+  createdBy        Int
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  creator          User              @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  workoutExercises WorkoutExercise[]
+  logs             Log[]
+}
+
+model WorkoutExercise {
+  id          Int      @id @default(autoincrement())
+  workoutId   Int
+  exerciseId  Int
+  sets        Int?
+  reps        Int?
+  durationSec Int?
+  order       Int
+  workout     Workout  @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  exercise    Exercise @relation(fields: [exerciseId], references: [id], onDelete: Restrict)
+
+  @@unique([workoutId, order])
+}
+
+model Log {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  workoutId   Int
+  durationMin Int
+  notes       String?
+  completedAt DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workout     Workout  @relation(fields: [workoutId], references: [id], onDelete: Restrict)
+}
